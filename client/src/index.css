@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+
+/* CSS Variables for Themes */
+:root {
+  --color-background: #ffffff;
+  --color-card-bg: #f8f9fa;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-accent: #00b359;
+  --color-border: #e0e0e0;
+  --color-input-bg: #ffffff;
+  --color-glow: rgba(0, 179, 89, 0.25);
+}
+
+:root.dark {
+  --color-background: #0a0a0a;
+  --color-card-bg: #1a1a1a;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b3b3b3;
+  --color-accent: #00ff88;
+  --color-border: #333333;
+  --color-input-bg: #1a1a1a;
+  --color-glow: rgba(0, 255, 136, 0.25);
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+/* Display font for headings */
+.display-font {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+/* Heading gradient effect */
+.heading-gradient {
+  background: linear-gradient(90deg, var(--color-text-primary), #555555);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Mirror effect for logo */
+.mirror-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.mirror-effect::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+.mirror-effect:hover::before {
+  animation: mirror-glow 1.5s ease;
+}
+
+@keyframes mirror-glow {
+  0% {
+    transform: rotate(45deg) translate(-10%, -10%);
+  }
+  100% {
+    transform: rotate(45deg) translate(10%, 10%);
+  }
+}
+
+/* Glow button effect */
+.glow-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: none;
+  background-color: var(--color-accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.glow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--color-glow);
+}
+
+.glow-button:active {
+  transform: translateY(0);
+}
+
+.glow-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.glow-button:hover::before {
+  left: 100%;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00994d;
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* Focus ring */
+.focus-ring {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .heading-gradient {
+    background: linear-gradient(90deg, var(--color-text-primary), #777777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
