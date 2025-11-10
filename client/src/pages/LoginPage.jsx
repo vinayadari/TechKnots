@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import toast from "react-hot-toast";
@@ -8,6 +8,14 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) navigate("/dashboard");
+    };
+    checkSession();
+  }, [navigate]);
+
   const handleLogin = async e => {
     e.preventDefault();
     setLoading(true);
@@ -16,7 +24,10 @@ const LoginPage = () => {
     const password = e.target.password.value;
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) throw error;
 
       toast.success("Logged in successfully!");
@@ -28,37 +39,23 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (err) {
-      toast.error("Google login failed. Try again.");
-    }
-  };
+  const redirectTo = `${window.location.origin}/auth/callback`;
 
-  const handleGithubLogin = async () => {
+  const handleOAuthLogin = async provider => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
+        provider,
+        options: { redirectTo },
       });
       if (error) throw error;
     } catch (err) {
-      toast.error("GitHub login failed. Try again.");
+      toast.error(`${provider} login failed. Try again.`);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white relative overflow-hidden pt-32">
-      {/* Circular emerald glows */}
+      {/* Glowing Backgrounds */}
       <div
         className="pointer-events-none absolute top-1/4 right-[-200px] w-[800px] h-[800px] rounded-full"
         style={{
@@ -157,6 +154,7 @@ const LoginPage = () => {
                 </button>
               </form>
 
+              {/* Social Logins */}
               <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -169,15 +167,16 @@ const LoginPage = () => {
 
                 <div className="mt-6 grid grid-cols-2 gap-3">
                   <button
-                    onClick={handleGoogleLogin}
+                    onClick={() => handleOAuthLogin("google")}
                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-200 rounded-md shadow-sm bg-white text-sm font-medium text-gray-900 hover:bg-gray-50"
                   >
                     <svg className="h-5 w-5 text-[#4285F4]" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" />
                     </svg>
                   </button>
+
                   <button
-                    onClick={handleGithubLogin}
+                    onClick={() => handleOAuthLogin("github")}
                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-200 rounded-md shadow-sm bg-white text-sm font-medium text-gray-900 hover:bg-gray-50"
                   >
                     <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
