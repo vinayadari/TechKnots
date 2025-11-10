@@ -30,7 +30,12 @@ const LoginPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
       if (error) throw error;
     } catch (err) {
       toast.error("Google login failed. Try again.");
@@ -39,7 +44,12 @@ const LoginPage = () => {
 
   const handleGithubLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider: "github" });
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
       if (error) throw error;
     } catch (err) {
       toast.error("GitHub login failed. Try again.");
